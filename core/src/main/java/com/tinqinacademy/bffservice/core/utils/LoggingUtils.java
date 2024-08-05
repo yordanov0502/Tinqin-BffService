@@ -1,6 +1,6 @@
 package com.tinqinacademy.bffservice.core.utils;
 
-import com.tinqinacademy.bffservice.core.exceptions.custom.NoMethodFoundException;
+import com.tinqinacademy.bffservice.api.exceptions.custom.NoMethodFoundException;
 
 public class LoggingUtils {
     public static String getMethodName() {

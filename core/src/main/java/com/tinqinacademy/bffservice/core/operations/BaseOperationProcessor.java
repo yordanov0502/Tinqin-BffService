@@ -1,9 +1,9 @@
 package com.tinqinacademy.bffservice.core.operations;
 
 import com.tinqinacademy.bffservice.api.base.OperationInput;
-import com.tinqinacademy.bffservice.api.error.Error;
+import com.tinqinacademy.bffservice.api.exceptions.Error;
 import com.tinqinacademy.bffservice.core.exceptions.ExceptionService;
-import com.tinqinacademy.bffservice.core.exceptions.custom.ViolationsException;
+import com.tinqinacademy.bffservice.api.exceptions.custom.ViolationsException;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validator;
 import lombok.RequiredArgsConstructor;

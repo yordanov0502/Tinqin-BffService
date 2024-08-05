@@ -1,9 +1,9 @@
 package com.tinqinacademy.bffservice.core.exceptions;
 
-import com.tinqinacademy.bffservice.api.error.Error;
-import com.tinqinacademy.bffservice.api.error.Errors;
-import com.tinqinacademy.bffservice.core.exceptions.custom.CustomException;
-import com.tinqinacademy.bffservice.core.exceptions.custom.ViolationsException;
+import com.tinqinacademy.bffservice.api.exceptions.Error;
+import com.tinqinacademy.bffservice.api.exceptions.Errors;
+import com.tinqinacademy.bffservice.api.exceptions.custom.CustomException;
+import com.tinqinacademy.bffservice.api.exceptions.custom.ViolationsException;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 

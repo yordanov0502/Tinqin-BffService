@@ -1,6 +1,6 @@
-package com.tinqinacademy.bffservice.core.exceptions.custom;
+package com.tinqinacademy.bffservice.api.exceptions.custom;
 
-import com.tinqinacademy.bffservice.api.error.Error;
+import com.tinqinacademy.bffservice.api.exceptions.Error;
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
 
