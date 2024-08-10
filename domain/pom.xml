@@ -29,6 +29,12 @@
             <version>${comments-service.restexport.version}</version>
         </dependency>
 
+        <dependency>
+            <groupId>com.tinqinacademy.authentication-service</groupId>
+            <artifactId>restexport</artifactId>
+            <version>${authentication-service.restexport.version}</version>
+        </dependency>
+
     </dependencies>
 
 
