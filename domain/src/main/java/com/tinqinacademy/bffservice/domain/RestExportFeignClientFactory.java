@@ -1,6 +1,7 @@
 package com.tinqinacademy.bffservice.domain;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.tinqinacademy.authenticationservice.restexport.AuthenticationRestExport;
 import com.tinqinacademy.commentsservice.restexport.CommentsRestExport;
 import com.tinqinacademy.hotel.restexport.HotelRestExport;
 import feign.Feign;
@@ -21,6 +22,8 @@ public class RestExportFeignClientFactory {
     private String HOTEL_SERVICE_URL;
     @Value("${env.COMMENTS_SERVICE_URL}")
     private String COMMENTS_SERVICE_URL;
+    @Value("${env.AUTHENTICATION_SERVICE_URL}")
+    private String AUTHENTICATION_SERVICE_URL;
     private final ApplicationContext applicationContext;
 
     @Bean
@@ -39,6 +42,15 @@ public class RestExportFeignClientFactory {
                 .encoder(new JacksonEncoder(applicationContext.getBean(ObjectMapper.class)))
                 .decoder(new JacksonDecoder(applicationContext.getBean(ObjectMapper.class)))
                 .target(CommentsRestExport.class,COMMENTS_SERVICE_URL);
+    }
+
+    @Bean
+    public AuthenticationRestExport buildAuthenticationFeignClient() {
+        return Feign.builder()
+                .client(new OkHttpClient())
+                .encoder(new JacksonEncoder(applicationContext.getBean(ObjectMapper.class)))
+                .decoder(new JacksonDecoder(applicationContext.getBean(ObjectMapper.class)))
+                .target(AuthenticationRestExport.class,AUTHENTICATION_SERVICE_URL);
     }
 
 }
