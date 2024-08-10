@@ -2,14 +2,11 @@ package com.tinqinacademy.bffservice.rest.controllers;
 
 import com.tinqinacademy.bffservice.api.RestApiRoutes;
 import com.tinqinacademy.commentsservice.restexport.CommentsRestExport;
-import com.tinqinacademy.hotel.api.exceptions.Errors;
 import com.tinqinacademy.hotel.api.operations.hotel.bookroom.BookRoomInput;
-import com.tinqinacademy.hotel.api.operations.hotel.bookroom.BookRoomOutput;
 import com.tinqinacademy.hotel.restexport.HotelRestExport;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import io.vavr.control.Either;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
