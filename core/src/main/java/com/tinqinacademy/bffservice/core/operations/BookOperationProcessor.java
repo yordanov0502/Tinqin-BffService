@@ -37,7 +37,7 @@ public class BookOperationProcessor extends BaseOperationProcessor implements Bo
                     BookRoomOutput hotelOutput = hotelClient.bookRoom(bffInput.getRoomId(),hotelInput);
 
                     BookRoomBffOutput bffOutput = conversionService.convert(hotelOutput,BookRoomBffOutput.class);
-                    log.info("End bookRoom output:{}",bffOutput);
+                    log.info(String.format("End %s %s output: %s", this.getClass().getSimpleName(), LoggingUtils.getMethodName(), bffOutput));
                     return bffOutput;})
                 .toEither()
                 .mapLeft(exceptionService::handle);
