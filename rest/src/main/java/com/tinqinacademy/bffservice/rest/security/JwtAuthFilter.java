@@ -2,6 +2,7 @@ package com.tinqinacademy.bffservice.rest.security;
 
 import com.tinqinacademy.authenticationservice.api.operations.auth.AuthOutput;
 import com.tinqinacademy.authenticationservice.restexport.AuthenticationRestExport;
+import com.tinqinacademy.bffservice.persistence.model.context.UserContext;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -23,6 +24,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
     private final AuthenticationRestExport authenticationClient;
     private final JwtDecoder jwtDecoder;
+    private final UserContext userContext;
 
     @Override
     protected void doFilterInternal(
@@ -54,6 +56,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                 .build();
         Authentication authentication = new CustomAuthToken(userDetailsModel);
         SecurityContextHolder.getContext().setAuthentication(authentication);
+        userContext.setUserId(userId);
 
         filterChain.doFilter(request, response);
     }
