@@ -5,6 +5,9 @@ import com.tinqinacademy.bffservice.api.exceptions.Errors;
 import com.tinqinacademy.bffservice.api.operations.hotelservice.hotel.bookroom.BookRoomBffInput;
 import com.tinqinacademy.bffservice.api.operations.hotelservice.hotel.bookroom.BookRoomOperation;
 import com.tinqinacademy.bffservice.api.operations.hotelservice.hotel.bookroom.BookRoomBffOutput;
+import com.tinqinacademy.bffservice.api.operations.hotelservice.hotel.unbookroom.UnbookOperation;
+import com.tinqinacademy.bffservice.api.operations.hotelservice.hotel.unbookroom.UnbookRoomBffInput;
+import com.tinqinacademy.bffservice.api.operations.hotelservice.hotel.unbookroom.UnbookRoomBffOutput;
 import com.tinqinacademy.bffservice.persistence.model.context.UserContext;
 import com.tinqinacademy.bffservice.rest.controllers.BaseController;
 import io.swagger.v3.oas.annotations.Operation;
@@ -21,9 +24,8 @@ import org.springframework.web.bind.annotation.*;
 public class HotelController extends BaseController {
 
     private final BookRoomOperation bookRoomOperation;
-    private final UserContext userContext;
-
-    @Operation(summary = "Book a room.",
+    private final UnbookOperation unbookOperation;
+    @Operation(summary = "Book room.",
             description = "Books the room specified.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Successfully booked room."),
@@ -35,10 +37,26 @@ public class HotelController extends BaseController {
     public ResponseEntity<?> bookRoom(@PathVariable String roomId, @RequestBody BookRoomBffInput inputArg) {
         BookRoomBffInput input = inputArg.toBuilder()
                 .roomId(roomId)
-                .userId(userContext.getUserId())
                 .build();
         Either<Errors, BookRoomBffOutput> either = bookRoomOperation.process(input);
         return mapToResponseEntity(either,HttpStatus.CREATED);
+    }
+
+    @Operation(summary = "Unbook room.",
+            description = "Unbooks a room that the user has already booked.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successfully unbooked room."),
+            @ApiResponse(responseCode = "400", description = "Bad request."),
+            @ApiResponse(responseCode = "401", description = "Unauthorized."),
+            @ApiResponse(responseCode = "404", description = "Not found.")
+    })
+    @DeleteMapping(RestApiRoutes.UNBOOK_ROOM)
+    public ResponseEntity<?> unbookRoom(@PathVariable String bookingId) {
+        UnbookRoomBffInput input = UnbookRoomBffInput.builder()
+                .bookingId(bookingId)
+                .build();
+        Either<Errors, UnbookRoomBffOutput> either = unbookOperation.process(input);
+        return mapToResponseEntity(either,HttpStatus.OK);
     }
 
 }
