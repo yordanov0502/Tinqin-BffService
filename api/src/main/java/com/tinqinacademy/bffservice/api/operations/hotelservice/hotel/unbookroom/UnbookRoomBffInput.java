@@ -2,7 +2,7 @@ package com.tinqinacademy.bffservice.api.operations.hotelservice.hotel.unbookroo
 
 
 import com.tinqinacademy.bffservice.api.base.OperationInput;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 import org.hibernate.validator.constraints.UUID;
 
@@ -13,7 +13,7 @@ import org.hibernate.validator.constraints.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UnbookRoomBffInput implements OperationInput {
-    @NotNull
+    @NotBlank
     @UUID
     private String bookingId;
 }
