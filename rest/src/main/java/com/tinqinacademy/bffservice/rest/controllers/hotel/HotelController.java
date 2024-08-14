@@ -5,6 +5,9 @@ import com.tinqinacademy.bffservice.api.exceptions.Errors;
 import com.tinqinacademy.bffservice.api.operations.hotelservice.hotel.bookroom.BookRoomBffInput;
 import com.tinqinacademy.bffservice.api.operations.hotelservice.hotel.bookroom.BookRoomOperation;
 import com.tinqinacademy.bffservice.api.operations.hotelservice.hotel.bookroom.BookRoomBffOutput;
+import com.tinqinacademy.bffservice.api.operations.hotelservice.hotel.getroom.GetRoomOperation;
+import com.tinqinacademy.bffservice.api.operations.hotelservice.hotel.getroom.RoomInfoBffInput;
+import com.tinqinacademy.bffservice.api.operations.hotelservice.hotel.getroom.RoomInfoBffOutput;
 import com.tinqinacademy.bffservice.api.operations.hotelservice.hotel.unbookroom.UnbookOperation;
 import com.tinqinacademy.bffservice.api.operations.hotelservice.hotel.unbookroom.UnbookRoomBffInput;
 import com.tinqinacademy.bffservice.api.operations.hotelservice.hotel.unbookroom.UnbookRoomBffOutput;
@@ -24,6 +27,24 @@ public class HotelController extends BaseController {
 
     private final BookRoomOperation bookRoomOperation;
     private final UnbookOperation unbookOperation;
+    private final GetRoomOperation getRoomOperation;
+
+    @Operation(summary = "Get room information.",
+            description = "Returns basic info for a room with the specific id.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successfully returned info for a room."),
+            @ApiResponse(responseCode = "400", description = "Bad request."),
+            @ApiResponse(responseCode = "404", description = "Not found.")
+    })
+    @GetMapping(RestApiRoutes.GET_INFO_FOR_ROOM)
+    public ResponseEntity<?> getRoomInfo(@PathVariable String roomId) {
+        RoomInfoBffInput input = RoomInfoBffInput.builder()
+                .roomId(roomId)
+                .build();
+        Either<Errors, RoomInfoBffOutput> either = getRoomOperation.process(input);
+        return mapToResponseEntity(either,HttpStatus.OK);
+    }
+
     @Operation(summary = "Book room.",
             description = "Books the room specified.")
     @ApiResponses(value = {
