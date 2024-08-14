@@ -8,7 +8,6 @@ import com.tinqinacademy.bffservice.api.operations.hotelservice.hotel.bookroom.B
 import com.tinqinacademy.bffservice.api.operations.hotelservice.hotel.unbookroom.UnbookOperation;
 import com.tinqinacademy.bffservice.api.operations.hotelservice.hotel.unbookroom.UnbookRoomBffInput;
 import com.tinqinacademy.bffservice.api.operations.hotelservice.hotel.unbookroom.UnbookRoomBffOutput;
-import com.tinqinacademy.bffservice.persistence.model.context.UserContext;
 import com.tinqinacademy.bffservice.rest.controllers.BaseController;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
