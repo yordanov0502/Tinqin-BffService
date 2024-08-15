@@ -15,6 +15,7 @@ import com.tinqinacademy.bffservice.api.operations.hotelservice.hotel.unbookroom
 import com.tinqinacademy.bffservice.api.operations.hotelservice.hotel.unbookroom.UnbookRoomBffInput;
 import com.tinqinacademy.bffservice.api.operations.hotelservice.hotel.unbookroom.UnbookRoomBffOutput;
 import com.tinqinacademy.bffservice.rest.controllers.BaseController;
+import com.tinqinacademy.bffservice.rest.security.UserContext;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -30,6 +31,7 @@ import java.time.LocalDate;
 @RequiredArgsConstructor
 public class HotelController extends BaseController {
 
+    private final UserContext userContext;
     private final GetIdsOfAvailableRoomsOperation getAvailableRoomsOperation;
     private final GetRoomOperation getRoomOperation;
     private final BookRoomOperation bookRoomOperation;
@@ -91,6 +93,7 @@ public class HotelController extends BaseController {
     public ResponseEntity<?> bookRoom(@PathVariable String roomId, @RequestBody BookRoomBffInput inputArg) {
         BookRoomBffInput input = inputArg.toBuilder()
                 .roomId(roomId)
+                .userContextId(userContext.getUserId())
                 .build();
         Either<Errors, BookRoomBffOutput> either = bookRoomOperation.process(input);
         return mapToResponseEntity(either,HttpStatus.CREATED);
@@ -108,6 +111,7 @@ public class HotelController extends BaseController {
     public ResponseEntity<?> unbookRoom(@PathVariable String bookingId) {
         UnbookRoomBffInput input = UnbookRoomBffInput.builder()
                 .bookingId(bookingId)
+                .userContextId(userContext.getUserId())
                 .build();
         Either<Errors, UnbookRoomBffOutput> either = unbookOperation.process(input);
         return mapToResponseEntity(either,HttpStatus.OK);

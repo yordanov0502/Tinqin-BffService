@@ -1,14 +1,16 @@
-package com.tinqinacademy.bffservice.persistence.model.context;
+package com.tinqinacademy.bffservice.rest.security;
 
 import lombok.Getter;
-import lombok.Setter;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.annotation.RequestScope;
 
 @Getter
-@Setter
 @Component
 @RequestScope
 public class UserContext {
     private String userId;
+
+    void setContext(String userId){
+        this.userId = userId;
+    }
 }

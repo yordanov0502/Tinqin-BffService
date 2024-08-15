@@ -1,6 +1,7 @@
 package com.tinqinacademy.bffservice.api.operations.hotelservice.hotel.unbookroom;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.tinqinacademy.bffservice.api.base.OperationInput;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
@@ -16,4 +17,8 @@ public class UnbookRoomBffInput implements OperationInput {
     @NotBlank
     @UUID
     private String bookingId;
+
+    @JsonIgnore
+    @UUID
+    private String userContextId;
 }
