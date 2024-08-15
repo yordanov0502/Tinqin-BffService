@@ -25,4 +25,7 @@ public class BookRoomBffInput implements OperationInput {
     private LocalDate startDate;
     @NotNull
     private LocalDate endDate;
+    @JsonIgnore
+    @UUID
+    private String userContextId;
 }
