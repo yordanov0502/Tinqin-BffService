@@ -5,6 +5,9 @@ import com.tinqinacademy.bffservice.api.exceptions.Errors;
 import com.tinqinacademy.bffservice.api.operations.hotelservice.hotel.bookroom.BookRoomBffInput;
 import com.tinqinacademy.bffservice.api.operations.hotelservice.hotel.bookroom.BookRoomOperation;
 import com.tinqinacademy.bffservice.api.operations.hotelservice.hotel.bookroom.BookRoomBffOutput;
+import com.tinqinacademy.bffservice.api.operations.hotelservice.hotel.getavailablerooms.AvailableRoomsIdsBffOutput;
+import com.tinqinacademy.bffservice.api.operations.hotelservice.hotel.getavailablerooms.GetIdsOfAvailableRoomsBffInput;
+import com.tinqinacademy.bffservice.api.operations.hotelservice.hotel.getavailablerooms.GetIdsOfAvailableRoomsOperation;
 import com.tinqinacademy.bffservice.api.operations.hotelservice.hotel.getroom.GetRoomOperation;
 import com.tinqinacademy.bffservice.api.operations.hotelservice.hotel.getroom.RoomInfoBffInput;
 import com.tinqinacademy.bffservice.api.operations.hotelservice.hotel.getroom.RoomInfoBffOutput;
@@ -21,13 +24,44 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
+
 @RestController
 @RequiredArgsConstructor
 public class HotelController extends BaseController {
 
+    private final GetIdsOfAvailableRoomsOperation getAvailableRoomsOperation;
+    private final GetRoomOperation getRoomOperation;
     private final BookRoomOperation bookRoomOperation;
     private final UnbookOperation unbookOperation;
-    private final GetRoomOperation getRoomOperation;
+
+    @Operation(summary = "Get ids of available rooms.",
+            description = "Checks whether a room is available for a certain period. Bed requirements should come as query parameters in URL.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successfully returned list with ids of available rooms."),
+            @ApiResponse(responseCode = "400", description = "Bad request."),
+            @ApiResponse(responseCode = "404", description = "Not found.")
+    })
+    @GetMapping(RestApiRoutes.GET_IDS_OF_AVAILABLE_ROOMS)
+    public ResponseEntity<?> getIdsOfAvailableRooms(
+            @RequestParam LocalDate startDate,
+            @RequestParam LocalDate endDate,
+            @RequestParam(required = false) Integer bedCount,
+            @RequestParam(required = false) String bedSize,
+            @RequestParam(required = false) String bathroomType) {
+
+        GetIdsOfAvailableRoomsBffInput input = GetIdsOfAvailableRoomsBffInput.builder()
+                .startDate(startDate)
+                .endDate(endDate)
+                .bedCount(bedCount)
+                .bedSize(bedSize)
+                .bathroomType(bathroomType)
+                .build();
+
+        Either<Errors, AvailableRoomsIdsBffOutput> either = getAvailableRoomsOperation.process(input);
+
+        return mapToResponseEntity(either,HttpStatus.OK);
+    }
 
     @Operation(summary = "Get room information.",
             description = "Returns basic info for a room with the specific id.")
