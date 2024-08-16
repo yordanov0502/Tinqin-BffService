@@ -14,6 +14,9 @@ import com.tinqinacademy.bffservice.api.operations.hotelservice.hotel.getroom.Ro
 import com.tinqinacademy.bffservice.api.operations.hotelservice.hotel.unbookroom.UnbookOperation;
 import com.tinqinacademy.bffservice.api.operations.hotelservice.hotel.unbookroom.UnbookRoomBffInput;
 import com.tinqinacademy.bffservice.api.operations.hotelservice.hotel.unbookroom.UnbookRoomBffOutput;
+import com.tinqinacademy.bffservice.api.operations.hotelservice.system.getvisitors.GetVisitorOperation;
+import com.tinqinacademy.bffservice.api.operations.hotelservice.system.getvisitors.GetVisitorsBffInput;
+import com.tinqinacademy.bffservice.api.operations.hotelservice.system.getvisitors.GetVisitorsBffOutput;
 import com.tinqinacademy.bffservice.api.operations.hotelservice.system.registervisitor.RegisterVisitorBffInput;
 import com.tinqinacademy.bffservice.api.operations.hotelservice.system.registervisitor.RegisterVisitorBffOutput;
 import com.tinqinacademy.bffservice.api.operations.hotelservice.system.registervisitor.RegisterVisitorOperation;
@@ -39,6 +42,7 @@ public class HotelController extends BaseController {
     private final BookRoomOperation bookRoomOperation;
     private final UnbookOperation unbookOperation;
     private final RegisterVisitorOperation registerVisitorOperation;
+    private final GetVisitorOperation getVisitorOperation;
 
     @Operation(summary = "Get ids of available rooms.",
             description = "Checks whether a room is available for a certain period. Bed requirements should come as query parameters in URL.")
@@ -133,5 +137,46 @@ public class HotelController extends BaseController {
     public ResponseEntity<?> registerVisitor(@RequestBody RegisterVisitorBffInput input) {
         Either<Errors, RegisterVisitorBffOutput> either = registerVisitorOperation.process(input);
         return mapToResponseEntity(either, HttpStatus.CREATED);
+    }
+
+    @Operation(summary = "Get visitors.",
+            description = "Admin only. Provides a report based on various criteria. Provides info when room was occupied and by whom. Can report when when a user has occupied rooms.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successfully got info for visitors."),
+            @ApiResponse(responseCode = "400", description = "Bad request."),
+            @ApiResponse(responseCode = "401", description = "Unauthorized."),
+            @ApiResponse(responseCode = "403", description = "Forbidden."),
+            @ApiResponse(responseCode = "404", description = "Not found.")
+    })
+    @GetMapping(RestApiRoutes.GET_VISITORS)
+    public ResponseEntity<?> getVisitors(
+            @RequestParam LocalDate startDate,
+            @RequestParam LocalDate endDate,
+            @RequestParam(required = false) String firstName,
+            @RequestParam(required = false) String lastName,
+            @RequestParam(required = false) String phoneNumber,
+            @RequestParam(required = false) String idCardNumber,
+            @RequestParam(required = false) LocalDate idCardValidity,
+            @RequestParam(required = false) String idCardIssueAuthority,
+            @RequestParam(required = false) LocalDate idCardIssueDate,
+            @RequestParam(required = false) String roomNumber
+    ) {
+
+        GetVisitorsBffInput input = GetVisitorsBffInput.builder()
+                .startDate(startDate)
+                .endDate(endDate)
+                .firstName(firstName)
+                .lastName(lastName)
+                .phoneNumber(phoneNumber)
+                .idCardNumber(idCardNumber)
+                .idCardValidity(idCardValidity)
+                .idCardIssueAuthority(idCardIssueAuthority)
+                .idCardIssueDate(idCardIssueDate)
+                .roomNumber(roomNumber)
+                .build();
+
+        Either<Errors, GetVisitorsBffOutput> either = getVisitorOperation.process(input);
+
+        return mapToResponseEntity(either, HttpStatus.OK);
     }
 }
