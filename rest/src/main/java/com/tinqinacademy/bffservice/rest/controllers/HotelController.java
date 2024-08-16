@@ -26,6 +26,9 @@ import com.tinqinacademy.bffservice.api.operations.hotelservice.system.registerv
 import com.tinqinacademy.bffservice.api.operations.hotelservice.system.updateroom.UpdateRoomBffInput;
 import com.tinqinacademy.bffservice.api.operations.hotelservice.system.updateroom.UpdateRoomBffOutput;
 import com.tinqinacademy.bffservice.api.operations.hotelservice.system.updateroom.UpdateRoomOperation;
+import com.tinqinacademy.bffservice.api.operations.hotelservice.system.updateroompartially.UpdateRoomPartiallyBffInput;
+import com.tinqinacademy.bffservice.api.operations.hotelservice.system.updateroompartially.UpdateRoomPartiallyBffOutput;
+import com.tinqinacademy.bffservice.api.operations.hotelservice.system.updateroompartially.UpdateRoomPartiallyOperation;
 import com.tinqinacademy.bffservice.rest.security.UserContext;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -51,6 +54,7 @@ public class HotelController extends BaseController {
     private final GetVisitorOperation getVisitorOperation;
     private final CreateRoomOperation createRoomOperation;
     private final UpdateRoomOperation updateRoomOperation;
+    private final UpdateRoomPartiallyOperation updateRoomPartiallyOperation;
 
     @Operation(summary = "Get ids of available rooms.",
             description = "Checks whether a room is available for a certain period. Bed requirements should come as query parameters in URL.")
@@ -218,6 +222,24 @@ public class HotelController extends BaseController {
                 .roomId(roomId)
                 .build();
         Either<Errors, UpdateRoomBffOutput> either = updateRoomOperation.process(input);
+        return mapToResponseEntity(either,HttpStatus.OK);
+    }
+
+    @Operation(summary = "Partial update for room.",
+            description = "Admin partial update of room data.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successfully updated room partially."),
+            @ApiResponse(responseCode = "400", description = "Bad request."),
+            @ApiResponse(responseCode = "401", description = "Unauthorized."),
+            @ApiResponse(responseCode = "403", description = "Forbidden."),
+            @ApiResponse(responseCode = "404", description = "Not found.")
+    })
+    @PatchMapping(value = RestApiRoutes.UPDATE_ROOM_PARTIALLY, consumes = "application/json-patch+json")
+    public ResponseEntity<?> updateRoomPartially(@PathVariable String roomId, @RequestBody UpdateRoomPartiallyBffInput inputArg) {
+        UpdateRoomPartiallyBffInput input = inputArg.toBuilder()
+                .roomId(roomId)
+                .build();
+        Either<Errors, UpdateRoomPartiallyBffOutput> either = updateRoomPartiallyOperation.process(input);
         return mapToResponseEntity(either,HttpStatus.OK);
     }
 }

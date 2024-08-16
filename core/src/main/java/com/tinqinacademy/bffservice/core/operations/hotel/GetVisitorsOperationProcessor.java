@@ -1,10 +1,11 @@
-package com.tinqinacademy.bffservice.core.operations;
+package com.tinqinacademy.bffservice.core.operations.hotel;
 
 import com.tinqinacademy.bffservice.api.exceptions.Errors;
 import com.tinqinacademy.bffservice.api.operations.hotelservice.system.getvisitors.GetVisitorOperation;
 import com.tinqinacademy.bffservice.api.operations.hotelservice.system.getvisitors.GetVisitorsBffInput;
 import com.tinqinacademy.bffservice.api.operations.hotelservice.system.getvisitors.GetVisitorsBffOutput;
 import com.tinqinacademy.bffservice.core.exceptions.ExceptionService;
+import com.tinqinacademy.bffservice.core.operations.BaseOperationProcessor;
 import com.tinqinacademy.bffservice.core.utils.LoggingUtils;
 import com.tinqinacademy.hotel.api.operations.system.getvisitors.GetVisitorsOutput;
 import com.tinqinacademy.hotel.restexport.HotelRestExport;
