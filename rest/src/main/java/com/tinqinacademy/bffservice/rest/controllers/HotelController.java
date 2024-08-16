@@ -14,6 +14,9 @@ import com.tinqinacademy.bffservice.api.operations.hotelservice.hotel.getroom.Ro
 import com.tinqinacademy.bffservice.api.operations.hotelservice.hotel.unbookroom.UnbookOperation;
 import com.tinqinacademy.bffservice.api.operations.hotelservice.hotel.unbookroom.UnbookRoomBffInput;
 import com.tinqinacademy.bffservice.api.operations.hotelservice.hotel.unbookroom.UnbookRoomBffOutput;
+import com.tinqinacademy.bffservice.api.operations.hotelservice.system.createroom.CreateRoomBffInput;
+import com.tinqinacademy.bffservice.api.operations.hotelservice.system.createroom.CreateRoomBffOutput;
+import com.tinqinacademy.bffservice.api.operations.hotelservice.system.createroom.CreateRoomOperation;
 import com.tinqinacademy.bffservice.api.operations.hotelservice.system.getvisitors.GetVisitorOperation;
 import com.tinqinacademy.bffservice.api.operations.hotelservice.system.getvisitors.GetVisitorsBffInput;
 import com.tinqinacademy.bffservice.api.operations.hotelservice.system.getvisitors.GetVisitorsBffOutput;
@@ -43,6 +46,7 @@ public class HotelController extends BaseController {
     private final UnbookOperation unbookOperation;
     private final RegisterVisitorOperation registerVisitorOperation;
     private final GetVisitorOperation getVisitorOperation;
+    private final CreateRoomOperation createRoomOperation;
 
     @Operation(summary = "Get ids of available rooms.",
             description = "Checks whether a room is available for a certain period. Bed requirements should come as query parameters in URL.")
@@ -178,5 +182,20 @@ public class HotelController extends BaseController {
         Either<Errors, GetVisitorsBffOutput> either = getVisitorOperation.process(input);
 
         return mapToResponseEntity(either, HttpStatus.OK);
+    }
+
+    @Operation(summary = "Create room.",
+            description = "Admin creates a new room with the specified parameters.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Successfully created room."),
+            @ApiResponse(responseCode = "400", description = "Bad request."),
+            @ApiResponse(responseCode = "401", description = "Unauthorized."),
+            @ApiResponse(responseCode = "403", description = "Forbidden."),
+            @ApiResponse(responseCode = "404", description = "Not found."),
+    })
+    @PostMapping(RestApiRoutes.CREATE_ROOM)
+    public ResponseEntity<?> createRoom(@RequestBody CreateRoomBffInput input) {
+        Either<Errors, CreateRoomBffOutput> either = createRoomOperation.process(input);
+        return mapToResponseEntity(either, HttpStatus.CREATED);
     }
 }
