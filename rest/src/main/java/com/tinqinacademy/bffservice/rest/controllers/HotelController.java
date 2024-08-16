@@ -1,4 +1,4 @@
-package com.tinqinacademy.bffservice.rest.controllers.hotel;
+package com.tinqinacademy.bffservice.rest.controllers;
 
 import com.tinqinacademy.bffservice.api.RestApiRoutes;
 import com.tinqinacademy.bffservice.api.exceptions.Errors;
@@ -14,7 +14,9 @@ import com.tinqinacademy.bffservice.api.operations.hotelservice.hotel.getroom.Ro
 import com.tinqinacademy.bffservice.api.operations.hotelservice.hotel.unbookroom.UnbookOperation;
 import com.tinqinacademy.bffservice.api.operations.hotelservice.hotel.unbookroom.UnbookRoomBffInput;
 import com.tinqinacademy.bffservice.api.operations.hotelservice.hotel.unbookroom.UnbookRoomBffOutput;
-import com.tinqinacademy.bffservice.rest.controllers.BaseController;
+import com.tinqinacademy.bffservice.api.operations.hotelservice.system.registervisitor.RegisterVisitorBffInput;
+import com.tinqinacademy.bffservice.api.operations.hotelservice.system.registervisitor.RegisterVisitorBffOutput;
+import com.tinqinacademy.bffservice.api.operations.hotelservice.system.registervisitor.RegisterVisitorOperation;
 import com.tinqinacademy.bffservice.rest.security.UserContext;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -36,6 +38,7 @@ public class HotelController extends BaseController {
     private final GetRoomOperation getRoomOperation;
     private final BookRoomOperation bookRoomOperation;
     private final UnbookOperation unbookOperation;
+    private final RegisterVisitorOperation registerVisitorOperation;
 
     @Operation(summary = "Get ids of available rooms.",
             description = "Checks whether a room is available for a certain period. Bed requirements should come as query parameters in URL.")
@@ -117,4 +120,18 @@ public class HotelController extends BaseController {
         return mapToResponseEntity(either,HttpStatus.OK);
     }
 
+    @Operation(summary = "Register visitors.",
+            description = "Register visitors as room renters.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Successfully registered visitor."),
+            @ApiResponse(responseCode = "400", description = "Bad request."),
+            @ApiResponse(responseCode = "401", description = "Unauthorized."),
+            @ApiResponse(responseCode = "403", description = "Forbidden."),
+            @ApiResponse(responseCode = "404", description = "Not found.")
+    })
+    @PostMapping(RestApiRoutes.REGISTER_VISITOR)
+    public ResponseEntity<?> registerVisitor(@RequestBody RegisterVisitorBffInput input) {
+        Either<Errors, RegisterVisitorBffOutput> either = registerVisitorOperation.process(input);
+        return mapToResponseEntity(either, HttpStatus.CREATED);
+    }
 }
