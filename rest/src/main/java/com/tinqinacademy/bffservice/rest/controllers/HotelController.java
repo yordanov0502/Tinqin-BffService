@@ -17,6 +17,9 @@ import com.tinqinacademy.bffservice.api.operations.hotelservice.hotel.unbookroom
 import com.tinqinacademy.bffservice.api.operations.hotelservice.system.createroom.CreateRoomBffInput;
 import com.tinqinacademy.bffservice.api.operations.hotelservice.system.createroom.CreateRoomBffOutput;
 import com.tinqinacademy.bffservice.api.operations.hotelservice.system.createroom.CreateRoomOperation;
+import com.tinqinacademy.bffservice.api.operations.hotelservice.system.deleteroom.DeleteRoomBffInput;
+import com.tinqinacademy.bffservice.api.operations.hotelservice.system.deleteroom.DeleteRoomBffOutput;
+import com.tinqinacademy.bffservice.api.operations.hotelservice.system.deleteroom.DeleteRoomOperation;
 import com.tinqinacademy.bffservice.api.operations.hotelservice.system.getvisitors.GetVisitorOperation;
 import com.tinqinacademy.bffservice.api.operations.hotelservice.system.getvisitors.GetVisitorsBffInput;
 import com.tinqinacademy.bffservice.api.operations.hotelservice.system.getvisitors.GetVisitorsBffOutput;
@@ -55,6 +58,7 @@ public class HotelController extends BaseController {
     private final CreateRoomOperation createRoomOperation;
     private final UpdateRoomOperation updateRoomOperation;
     private final UpdateRoomPartiallyOperation updateRoomPartiallyOperation;
+    private final DeleteRoomOperation deleteRoomOperation;
 
     @Operation(summary = "Get ids of available rooms.",
             description = "Checks whether a room is available for a certain period. Bed requirements should come as query parameters in URL.")
@@ -240,6 +244,24 @@ public class HotelController extends BaseController {
                 .roomId(roomId)
                 .build();
         Either<Errors, UpdateRoomPartiallyBffOutput> either = updateRoomPartiallyOperation.process(input);
+        return mapToResponseEntity(either,HttpStatus.OK);
+    }
+
+    @Operation(summary = "Delete room.",
+            description = "Deletes a room.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successfully deleted room."),
+            @ApiResponse(responseCode = "400", description = "Bad request."),
+            @ApiResponse(responseCode = "401", description = "Unauthorized."),
+            @ApiResponse(responseCode = "403", description = "Forbidden."),
+            @ApiResponse(responseCode = "404", description = "Not found.")
+    })
+    @DeleteMapping(RestApiRoutes.DELETE_ROOM)
+    public ResponseEntity<?> deleteRoom(@PathVariable String roomId) {
+        DeleteRoomBffInput input = DeleteRoomBffInput.builder()
+                .roomId(roomId)
+                .build();
+        Either<Errors, DeleteRoomBffOutput> either = deleteRoomOperation.process(input);
         return mapToResponseEntity(either,HttpStatus.OK);
     }
 }
