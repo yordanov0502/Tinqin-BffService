@@ -1,4 +1,4 @@
-package com.tinqinacademy.bffservice.api.operations.commentsservice.system.addcommentforroom;
+package com.tinqinacademy.bffservice.api.operations.commentsservice.hotel.addcommentforroom;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.tinqinacademy.bffservice.api.base.OperationInput;
