@@ -5,6 +5,9 @@ import com.tinqinacademy.bffservice.api.exceptions.Errors;
 import com.tinqinacademy.bffservice.api.operations.commentsservice.hotel.addcommentforroom.AddCommentForRoomBffInput;
 import com.tinqinacademy.bffservice.api.operations.commentsservice.hotel.addcommentforroom.AddCommentForRoomBffOutput;
 import com.tinqinacademy.bffservice.api.operations.commentsservice.hotel.addcommentforroom.AddCommentForRoomOperation;
+import com.tinqinacademy.bffservice.api.operations.commentsservice.hotel.getallcommentsofroom.GetAllCommentsOfRoomBffInput;
+import com.tinqinacademy.bffservice.api.operations.commentsservice.hotel.getallcommentsofroom.GetAllCommentsOfRoomBffOutput;
+import com.tinqinacademy.bffservice.api.operations.commentsservice.hotel.getallcommentsofroom.GetAllCommentsOfRoomOperation;
 import com.tinqinacademy.bffservice.api.operations.commentsservice.system.deletecommentforroom.DeleteCommentForRoomBffInput;
 import com.tinqinacademy.bffservice.api.operations.commentsservice.system.deletecommentforroom.DeleteCommentForRoomBffOutput;
 import com.tinqinacademy.bffservice.api.operations.commentsservice.system.deletecommentforroom.DeleteCommentForRoomOperation;
@@ -25,6 +28,23 @@ public class CommentsController extends BaseController{
     private final UserContext userContext;
     private final AddCommentForRoomOperation addCommentForRoomOperation;
     private final DeleteCommentForRoomOperation deleteCommentForRoomOperation;
+    private final GetAllCommentsOfRoomOperation getAllCommentsOfRoomOperation;
+
+    @Operation(summary = "Get list of all comments for room.",
+            description = "Gets list of all commentInfos left for a certain room.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successfully returned all commentInfos for a room."),
+            @ApiResponse(responseCode = "400", description = "Bad request."),
+            @ApiResponse(responseCode = "404", description = "Not found.")
+    })
+    @GetMapping(RestApiRoutes.GET_ALL_ROOM_COMMENTS)
+    public ResponseEntity<?> getAllCommentsOfRoom(@PathVariable String roomId) {
+        GetAllCommentsOfRoomBffInput input = GetAllCommentsOfRoomBffInput.builder()
+                .roomId(roomId)
+                .build();
+        Either<Errors, GetAllCommentsOfRoomBffOutput> either = getAllCommentsOfRoomOperation.process(input);
+        return mapToResponseEntity(either,HttpStatus.OK);
+    }
 
     @Operation(summary = "Add a comment for room.",
             description = "Leaves a comment regarding a certain room.")
