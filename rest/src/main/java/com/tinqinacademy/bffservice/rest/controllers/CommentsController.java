@@ -5,6 +5,9 @@ import com.tinqinacademy.bffservice.api.exceptions.Errors;
 import com.tinqinacademy.bffservice.api.operations.commentsservice.hotel.addcommentforroom.AddCommentForRoomBffInput;
 import com.tinqinacademy.bffservice.api.operations.commentsservice.hotel.addcommentforroom.AddCommentForRoomBffOutput;
 import com.tinqinacademy.bffservice.api.operations.commentsservice.hotel.addcommentforroom.AddCommentForRoomOperation;
+import com.tinqinacademy.bffservice.api.operations.commentsservice.hotel.editcommentforroom.UserEditCommentForRoomBffInput;
+import com.tinqinacademy.bffservice.api.operations.commentsservice.hotel.editcommentforroom.UserEditCommentForRoomBffOutput;
+import com.tinqinacademy.bffservice.api.operations.commentsservice.hotel.editcommentforroom.UserEditCommentForRoomOperation;
 import com.tinqinacademy.bffservice.api.operations.commentsservice.hotel.getallcommentsofroom.GetAllCommentsOfRoomBffInput;
 import com.tinqinacademy.bffservice.api.operations.commentsservice.hotel.getallcommentsofroom.GetAllCommentsOfRoomBffOutput;
 import com.tinqinacademy.bffservice.api.operations.commentsservice.hotel.getallcommentsofroom.GetAllCommentsOfRoomOperation;
@@ -26,9 +29,10 @@ import org.springframework.web.bind.annotation.*;
 public class CommentsController extends BaseController{
 
     private final UserContext userContext;
-    private final AddCommentForRoomOperation addCommentForRoomOperation;
-    private final DeleteCommentForRoomOperation deleteCommentForRoomOperation;
     private final GetAllCommentsOfRoomOperation getAllCommentsOfRoomOperation;
+    private final AddCommentForRoomOperation addCommentForRoomOperation;
+    private final UserEditCommentForRoomOperation userEditCommentForRoomOperation;
+    private final DeleteCommentForRoomOperation deleteCommentForRoomOperation;
 
     @Operation(summary = "Get list of all comments for room.",
             description = "Gets list of all commentInfos left for a certain room.")
@@ -62,6 +66,24 @@ public class CommentsController extends BaseController{
                 .build();
         Either<Errors, AddCommentForRoomBffOutput> either = addCommentForRoomOperation.process(input);
         return mapToResponseEntity(either, HttpStatus.CREATED);
+    }
+
+    @Operation(summary = "Edit a comment for room. (user)",
+            description = "User can edit own comment left for a certain room. Last edited date is updated. Info regarding user edited is updated.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successfully edited comment for a room."),
+            @ApiResponse(responseCode = "400", description = "Bad request."),
+            @ApiResponse(responseCode = "401", description = "Unauthorized"),
+            @ApiResponse(responseCode = "404", description = "Not found.")
+    })
+    @PatchMapping(value = RestApiRoutes.EDIT_COMMENT_FOR_ROOM, consumes = "application/json-patch+json")
+    public ResponseEntity<?> editCommentForRoom(@PathVariable String commentId, @RequestBody UserEditCommentForRoomBffInput inputArg) {
+        UserEditCommentForRoomBffInput input = inputArg.toBuilder()
+                .commentId(commentId)
+                .userId(userContext.getUserId())
+                .build();
+        Either<Errors, UserEditCommentForRoomBffOutput> either = userEditCommentForRoomOperation.process(input);
+        return mapToResponseEntity(either,HttpStatus.OK);
     }
 
     @Operation(summary = "Delete a comment for room. (admin)",
