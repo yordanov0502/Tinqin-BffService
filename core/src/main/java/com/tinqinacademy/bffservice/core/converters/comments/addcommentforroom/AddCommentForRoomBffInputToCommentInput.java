@@ -1,6 +1,6 @@
-package com.tinqinacademy.bffservice.core.converters.comments;
+package com.tinqinacademy.bffservice.core.converters.comments.addcommentforroom;
 
-import com.tinqinacademy.bffservice.api.operations.commentsservice.system.addcommentforroom.AddCommentForRoomBffInput;
+import com.tinqinacademy.bffservice.api.operations.commentsservice.hotel.addcommentforroom.AddCommentForRoomBffInput;
 import com.tinqinacademy.bffservice.core.converters.BaseConverter;
 import com.tinqinacademy.commentsservice.api.operations.hotel.addcommentforroom.AddCommentForRoomInput;
 import org.springframework.stereotype.Component;

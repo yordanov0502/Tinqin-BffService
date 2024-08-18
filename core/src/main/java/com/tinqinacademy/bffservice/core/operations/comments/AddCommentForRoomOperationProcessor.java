@@ -1,9 +1,9 @@
 package com.tinqinacademy.bffservice.core.operations.comments;
 
 import com.tinqinacademy.bffservice.api.exceptions.Errors;
-import com.tinqinacademy.bffservice.api.operations.commentsservice.system.addcommentforroom.AddCommentForRoomBffInput;
-import com.tinqinacademy.bffservice.api.operations.commentsservice.system.addcommentforroom.AddCommentForRoomBffOutput;
-import com.tinqinacademy.bffservice.api.operations.commentsservice.system.addcommentforroom.AddCommentForRoomOperation;
+import com.tinqinacademy.bffservice.api.operations.commentsservice.hotel.addcommentforroom.AddCommentForRoomBffInput;
+import com.tinqinacademy.bffservice.api.operations.commentsservice.hotel.addcommentforroom.AddCommentForRoomBffOutput;
+import com.tinqinacademy.bffservice.api.operations.commentsservice.hotel.addcommentforroom.AddCommentForRoomOperation;
 import com.tinqinacademy.bffservice.core.exceptions.ExceptionService;
 import com.tinqinacademy.bffservice.core.operations.BaseOperationProcessor;
 import com.tinqinacademy.bffservice.core.utils.LoggingUtils;
