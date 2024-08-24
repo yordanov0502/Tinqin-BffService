@@ -6,7 +6,6 @@ import com.tinqinacademy.bffservice.api.operations.hotelservice.system.createroo
 import com.tinqinacademy.bffservice.api.operations.hotelservice.system.createroom.CreateRoomOperation;
 import com.tinqinacademy.bffservice.core.exceptions.ExceptionService;
 import com.tinqinacademy.bffservice.core.operations.BaseOperationProcessor;
-import com.tinqinacademy.bffservice.core.utils.LoggingUtils;
 import com.tinqinacademy.hotel.api.operations.system.createroom.CreateRoomInput;
 import com.tinqinacademy.hotel.api.operations.system.createroom.CreateRoomOutput;
 import com.tinqinacademy.hotel.restexport.HotelRestExport;

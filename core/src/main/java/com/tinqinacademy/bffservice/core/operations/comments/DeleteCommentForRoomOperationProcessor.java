@@ -6,7 +6,6 @@ import com.tinqinacademy.bffservice.api.operations.commentsservice.system.delete
 import com.tinqinacademy.bffservice.api.operations.commentsservice.system.deletecommentforroom.DeleteCommentForRoomOperation;
 import com.tinqinacademy.bffservice.core.exceptions.ExceptionService;
 import com.tinqinacademy.bffservice.core.operations.BaseOperationProcessor;
-import com.tinqinacademy.bffservice.core.utils.LoggingUtils;
 import com.tinqinacademy.commentsservice.restexport.CommentsRestExport;
 import io.vavr.control.Either;
 import io.vavr.control.Try;

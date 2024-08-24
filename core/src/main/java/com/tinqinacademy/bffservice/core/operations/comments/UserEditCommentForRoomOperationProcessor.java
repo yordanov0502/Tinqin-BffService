@@ -6,7 +6,6 @@ import com.tinqinacademy.bffservice.api.operations.commentsservice.hotel.editcom
 import com.tinqinacademy.bffservice.api.operations.commentsservice.hotel.editcommentforroom.UserEditCommentForRoomOperation;
 import com.tinqinacademy.bffservice.core.exceptions.ExceptionService;
 import com.tinqinacademy.bffservice.core.operations.BaseOperationProcessor;
-import com.tinqinacademy.bffservice.core.utils.LoggingUtils;
 import com.tinqinacademy.commentsservice.api.operations.hotel.editcommentforroom.UserEditCommentForRoomInput;
 import com.tinqinacademy.commentsservice.api.operations.hotel.editcommentforroom.UserEditCommentForRoomOutput;
 import com.tinqinacademy.commentsservice.restexport.CommentsRestExport;
