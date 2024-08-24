@@ -32,7 +32,6 @@ public class UserEditCommentForRoomOperationProcessor extends BaseOperationProce
     @Override
     public Either<Errors, UserEditCommentForRoomBffOutput> process(UserEditCommentForRoomBffInput bffInput) {
         return Try.of(() -> {
-                    log.info(String.format("Start %s %s input: %s", this.getClass().getSimpleName(), LoggingUtils.getMethodName(), bffInput));
                     validate(bffInput);
 
 
@@ -43,7 +42,6 @@ public class UserEditCommentForRoomOperationProcessor extends BaseOperationProce
                             .id(commentsOutput.getId())
                             .build();
 
-                    log.info(String.format("End %s %s output: %s", this.getClass().getSimpleName(), LoggingUtils.getMethodName(), bffOutput));
                     return bffOutput;
                 })
                 .toEither()

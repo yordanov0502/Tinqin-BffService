@@ -32,14 +32,12 @@ public class UnbookOperationProcessor extends BaseOperationProcessor implements 
     @Override
     public Either<Errors, UnbookRoomBffOutput> process(UnbookRoomBffInput bffInput) {
         return Try.of(() -> {
-                    log.info(String.format("Start %s %s input: %s", this.getClass().getSimpleName(), LoggingUtils.getMethodName(),bffInput));
                     validate(bffInput);
 
                     UnbookRoomInput hotelInput = conversionService.convert(bffInput,UnbookRoomInput.class);
                     UnbookRoomOutput hotelOutput = hotelClient.unbookRoom(hotelInput.getBookingId(),hotelInput);
 
                     UnbookRoomBffOutput bffOutput = conversionService.convert(hotelOutput,UnbookRoomBffOutput.class);
-                    log.info(String.format("End %s %s output: %s", this.getClass().getSimpleName(), LoggingUtils.getMethodName(), bffOutput));
                     return bffOutput;})
                 .toEither()
                 .mapLeft(exceptionService::handle);

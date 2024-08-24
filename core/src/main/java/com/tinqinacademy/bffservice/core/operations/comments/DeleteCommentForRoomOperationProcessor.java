@@ -29,13 +29,11 @@ public class DeleteCommentForRoomOperationProcessor extends BaseOperationProcess
     @Override
     public Either<Errors, DeleteCommentForRoomBffOutput> process(DeleteCommentForRoomBffInput bffInput) {
         return Try.of(() -> {
-                    log.info(String.format("Start %s %s input: %s", this.getClass().getSimpleName(), LoggingUtils.getMethodName(), bffInput));
                     validate(bffInput);
 
                     commentsClient.deleteCommentForRoom(bffInput.getCommentId());
 
                     DeleteCommentForRoomBffOutput bffOutput = DeleteCommentForRoomBffOutput.builder().build();
-                    log.info(String.format("End %s %s output: %s", this.getClass().getSimpleName(), LoggingUtils.getMethodName(), bffOutput));
                     return bffOutput;
                 })
                 .toEither()

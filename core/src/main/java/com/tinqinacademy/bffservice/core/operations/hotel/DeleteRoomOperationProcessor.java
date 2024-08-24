@@ -32,13 +32,11 @@ public class DeleteRoomOperationProcessor extends BaseOperationProcessor impleme
     @Override
     public Either<Errors, DeleteRoomBffOutput> process(DeleteRoomBffInput bffInput) {
         return Try.of(() -> {
-                    log.info(String.format("Start %s %s input: %s", this.getClass().getSimpleName(), LoggingUtils.getMethodName(), bffInput));
                     validate(bffInput);
 
                     hotelClient.deleteRoom(bffInput.getRoomId());
 
                     DeleteRoomBffOutput bffOutput = DeleteRoomBffOutput.builder().build();
-                    log.info(String.format("End %s %s output: %s", this.getClass().getSimpleName(), LoggingUtils.getMethodName(), bffOutput));
                     return bffOutput;
                 })
                 .toEither()

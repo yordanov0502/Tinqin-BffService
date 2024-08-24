@@ -33,7 +33,6 @@ public class GetAllCommentsOfRoomOperationProcessor extends BaseOperationProcess
     @Override
     public Either<Errors, GetAllCommentsOfRoomBffOutput> process(GetAllCommentsOfRoomBffInput bffInput) {
         return Try.of(() -> {
-                    log.info(String.format("Start %s %s input: %s", this.getClass().getSimpleName(), LoggingUtils.getMethodName(), bffInput));
                     validate(bffInput);
 
                     hotelClient.checkIfRoomExists(bffInput.getRoomId());
@@ -41,7 +40,6 @@ public class GetAllCommentsOfRoomOperationProcessor extends BaseOperationProcess
                     GetAllCommentsOfRoomOutput commentsOutput = commentsClient.getAllCommentsForRoom(bffInput.getRoomId());
                     GetAllCommentsOfRoomBffOutput bffOutput = conversionService.convert(commentsOutput, GetAllCommentsOfRoomBffOutput.class);
 
-                    log.info(String.format("End %s %s output: %s", this.getClass().getSimpleName(), LoggingUtils.getMethodName(), bffOutput));
                     return bffOutput;
                 })
                 .toEither()

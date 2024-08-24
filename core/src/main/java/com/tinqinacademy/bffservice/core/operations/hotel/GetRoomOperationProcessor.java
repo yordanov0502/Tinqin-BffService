@@ -30,13 +30,11 @@ public class GetRoomOperationProcessor extends BaseOperationProcessor implements
     @Override
     public Either<Errors, RoomInfoBffOutput> process(RoomInfoBffInput bffInput) {
         return Try.of(() -> {
-                    log.info(String.format("Start %s %s input: %s", this.getClass().getSimpleName(), LoggingUtils.getMethodName(), bffInput));
                     validate(bffInput);
 
                     RoomInfoOutput hotelOutput = hotelClient.getRoomById(bffInput.getRoomId());
 
                     RoomInfoBffOutput bffOutput = conversionService.convert(hotelOutput, RoomInfoBffOutput.class);
-                    log.info(String.format("End %s %s output: %s", this.getClass().getSimpleName(), LoggingUtils.getMethodName(), bffOutput));
                     return bffOutput;
                 })
                 .toEither()

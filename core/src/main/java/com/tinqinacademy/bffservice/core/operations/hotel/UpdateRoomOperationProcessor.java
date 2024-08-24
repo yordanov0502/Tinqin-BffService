@@ -32,7 +32,6 @@ public class UpdateRoomOperationProcessor extends BaseOperationProcessor impleme
     @Override
     public Either<Errors, UpdateRoomBffOutput> process(UpdateRoomBffInput bffInput) {
         return Try.of(() -> {
-                    log.info(String.format("Start %s %s input: %s", this.getClass().getSimpleName(), LoggingUtils.getMethodName(), bffInput));
                     validate(bffInput);
 
                     UpdateRoomInput hotelInput = conversionService.convert(bffInput, UpdateRoomInput.class);
@@ -41,7 +40,6 @@ public class UpdateRoomOperationProcessor extends BaseOperationProcessor impleme
                     UpdateRoomBffOutput bffOutput = UpdateRoomBffOutput.builder()
                             .roomId(hotelOutput.getRoomId())
                             .build();
-                    log.info(String.format("End %s %s output: %s", this.getClass().getSimpleName(), LoggingUtils.getMethodName(), bffOutput));
                     return bffOutput;
                 })
                 .toEither()

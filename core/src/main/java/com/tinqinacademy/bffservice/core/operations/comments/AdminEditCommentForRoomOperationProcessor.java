@@ -35,7 +35,6 @@ public class AdminEditCommentForRoomOperationProcessor extends BaseOperationProc
     @Override
     public Either<Errors, AdminEditCommentForRoomBffOutput> process(AdminEditCommentForRoomBffInput bffInput) {
         return Try.of(() -> {
-                    log.info(String.format("Start %s %s input: %s", this.getClass().getSimpleName(), LoggingUtils.getMethodName(), bffInput));
                     validate(bffInput);
 
                     GetRoomIdOutput hotelOutput = hoteClient.getRoomIdByNumber(bffInput.getRoomNo());
@@ -49,7 +48,6 @@ public class AdminEditCommentForRoomOperationProcessor extends BaseOperationProc
                             .id(commentsOutput.getId())
                             .build();
 
-                    log.info(String.format("End %s %s output: %s", this.getClass().getSimpleName(), LoggingUtils.getMethodName(), bffOutput));
                     return bffOutput;
                 })
                 .toEither()

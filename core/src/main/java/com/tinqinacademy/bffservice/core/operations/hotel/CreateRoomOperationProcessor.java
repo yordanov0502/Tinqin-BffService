@@ -31,14 +31,12 @@ public class CreateRoomOperationProcessor extends BaseOperationProcessor impleme
     @Override
     public Either<Errors, CreateRoomBffOutput> process(CreateRoomBffInput bffInput) {
         return Try.of(() -> {
-                    log.info(String.format("Start %s %s input: %s", this.getClass().getSimpleName(), LoggingUtils.getMethodName(), bffInput));
                     validate(bffInput);
 
                     CreateRoomInput hotelInput =  conversionService.convert(bffInput,CreateRoomInput.class);
                     CreateRoomOutput hotelOutput = hotelClient.createRoom(hotelInput);
 
                     CreateRoomBffOutput bffOutput = conversionService.convert(hotelOutput, CreateRoomBffOutput.class);
-                    log.info(String.format("End %s %s output: %s", this.getClass().getSimpleName(), LoggingUtils.getMethodName(), bffOutput));
                     return bffOutput;
                 })
                 .toEither()

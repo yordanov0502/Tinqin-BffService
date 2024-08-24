@@ -30,7 +30,6 @@ public class GetVisitorsOperationProcessor extends BaseOperationProcessor implem
     @Override
     public Either<Errors, GetVisitorsBffOutput> process(GetVisitorsBffInput bffInput) {
         return Try.of(() -> {
-                    log.info(String.format("Start %s %s input: %s", this.getClass().getSimpleName(), LoggingUtils.getMethodName(),bffInput));
                     validate(bffInput);
 
                     GetVisitorsOutput hotelOutput = hotelClient.getVisitors(
@@ -46,7 +45,6 @@ public class GetVisitorsOperationProcessor extends BaseOperationProcessor implem
                             bffInput.getRoomNumber());
 
                     GetVisitorsBffOutput bffOutput = conversionService.convert(hotelOutput,GetVisitorsBffOutput.class);
-                    log.info(String.format("End %s %s output: %s", this.getClass().getSimpleName(), LoggingUtils.getMethodName(), bffOutput));
                     return bffOutput;})
                 .toEither()
                 .mapLeft(exceptionService::handle);

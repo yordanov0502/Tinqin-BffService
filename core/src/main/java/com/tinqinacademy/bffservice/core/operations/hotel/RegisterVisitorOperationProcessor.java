@@ -30,14 +30,12 @@ public class RegisterVisitorOperationProcessor extends BaseOperationProcessor im
     @Override
     public Either<Errors, RegisterVisitorBffOutput> process(RegisterVisitorBffInput bffInput) {
         return Try.of(() -> {
-                    log.info(String.format("Start %s %s input: %s", this.getClass().getSimpleName(), LoggingUtils.getMethodName(),bffInput));
                     validate(bffInput);
 
                     RegisterVisitorInput hotelInput = conversionService.convert(bffInput,RegisterVisitorInput.class);
                     hotelClient.registerVisitors(hotelInput);
 
                     RegisterVisitorBffOutput bffOutput = RegisterVisitorBffOutput.builder().build(); //? "no response"
-                    log.info(String.format("End %s %s output: %s", this.getClass().getSimpleName(), LoggingUtils.getMethodName(), bffOutput));
                     return bffOutput;})
                 .toEither()
                 .mapLeft(exceptionService::handle);

@@ -31,14 +31,12 @@ public class BookOperationProcessor extends BaseOperationProcessor implements Bo
     @Override
     public Either<Errors, BookRoomBffOutput> process(BookRoomBffInput bffInput) {
         return Try.of(() -> {
-                    log.info(String.format("Start %s %s input: %s", this.getClass().getSimpleName(), LoggingUtils.getMethodName(),bffInput));
                     validate(bffInput);
 
                     BookRoomInput hotelInput = conversionService.convert(bffInput,BookRoomInput.class);
                     BookRoomOutput hotelOutput = hotelClient.bookRoom(bffInput.getRoomId(),hotelInput);
 
                     BookRoomBffOutput bffOutput = conversionService.convert(hotelOutput,BookRoomBffOutput.class);
-                    log.info(String.format("End %s %s output: %s", this.getClass().getSimpleName(), LoggingUtils.getMethodName(), bffOutput));
                     return bffOutput;})
                 .toEither()
                 .mapLeft(exceptionService::handle);
