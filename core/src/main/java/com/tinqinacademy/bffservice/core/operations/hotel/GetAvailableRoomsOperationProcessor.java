@@ -6,7 +6,6 @@ import com.tinqinacademy.bffservice.api.operations.hotelservice.hotel.getavailab
 import com.tinqinacademy.bffservice.api.operations.hotelservice.hotel.getavailablerooms.GetIdsOfAvailableRoomsOperation;
 import com.tinqinacademy.bffservice.core.exceptions.ExceptionService;
 import com.tinqinacademy.bffservice.core.operations.BaseOperationProcessor;
-import com.tinqinacademy.bffservice.core.utils.LoggingUtils;
 import com.tinqinacademy.hotel.api.operations.hotel.getavailablerooms.AvailableRoomsIdsOutput;
 import com.tinqinacademy.hotel.restexport.HotelRestExport;
 import io.vavr.control.Either;
@@ -30,13 +29,11 @@ public class GetAvailableRoomsOperationProcessor extends BaseOperationProcessor 
     @Override
     public Either<Errors, AvailableRoomsIdsBffOutput> process(GetIdsOfAvailableRoomsBffInput bffInput) {
         return Try.of(() -> {
-                    log.info(String.format("Start %s %s input: %s", this.getClass().getSimpleName(), LoggingUtils.getMethodName(), bffInput));
                     validate(bffInput);
 
                     AvailableRoomsIdsOutput hotelOutput = hotelClient.getAvailableRooms(bffInput.getStartDate(),bffInput.getEndDate(), bffInput.getBedCount(), bffInput.getBedSize(), bffInput.getBathroomType());
 
                     AvailableRoomsIdsBffOutput bffOutput = conversionService.convert(hotelOutput, AvailableRoomsIdsBffOutput.class);
-                    log.info(String.format("End %s %s output: %s", this.getClass().getSimpleName(), LoggingUtils.getMethodName(), bffOutput));
                     return bffOutput;
                 })
                 .toEither()

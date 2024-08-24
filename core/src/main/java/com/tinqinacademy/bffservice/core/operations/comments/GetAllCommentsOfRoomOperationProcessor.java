@@ -6,7 +6,6 @@ import com.tinqinacademy.bffservice.api.operations.commentsservice.hotel.getallc
 import com.tinqinacademy.bffservice.api.operations.commentsservice.hotel.getallcommentsofroom.GetAllCommentsOfRoomOperation;
 import com.tinqinacademy.bffservice.core.exceptions.ExceptionService;
 import com.tinqinacademy.bffservice.core.operations.BaseOperationProcessor;
-import com.tinqinacademy.bffservice.core.utils.LoggingUtils;
 import com.tinqinacademy.commentsservice.api.operations.hotel.getallcommentsofroom.GetAllCommentsOfRoomOutput;
 import com.tinqinacademy.commentsservice.restexport.CommentsRestExport;
 import com.tinqinacademy.hotel.restexport.HotelRestExport;
@@ -33,7 +32,6 @@ public class GetAllCommentsOfRoomOperationProcessor extends BaseOperationProcess
     @Override
     public Either<Errors, GetAllCommentsOfRoomBffOutput> process(GetAllCommentsOfRoomBffInput bffInput) {
         return Try.of(() -> {
-                    log.info(String.format("Start %s %s input: %s", this.getClass().getSimpleName(), LoggingUtils.getMethodName(), bffInput));
                     validate(bffInput);
 
                     hotelClient.checkIfRoomExists(bffInput.getRoomId());
@@ -41,7 +39,6 @@ public class GetAllCommentsOfRoomOperationProcessor extends BaseOperationProcess
                     GetAllCommentsOfRoomOutput commentsOutput = commentsClient.getAllCommentsForRoom(bffInput.getRoomId());
                     GetAllCommentsOfRoomBffOutput bffOutput = conversionService.convert(commentsOutput, GetAllCommentsOfRoomBffOutput.class);
 
-                    log.info(String.format("End %s %s output: %s", this.getClass().getSimpleName(), LoggingUtils.getMethodName(), bffOutput));
                     return bffOutput;
                 })
                 .toEither()

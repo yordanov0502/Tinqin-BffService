@@ -6,7 +6,6 @@ import com.tinqinacademy.bffservice.api.operations.hotelservice.system.getvisito
 import com.tinqinacademy.bffservice.api.operations.hotelservice.system.getvisitors.GetVisitorsBffOutput;
 import com.tinqinacademy.bffservice.core.exceptions.ExceptionService;
 import com.tinqinacademy.bffservice.core.operations.BaseOperationProcessor;
-import com.tinqinacademy.bffservice.core.utils.LoggingUtils;
 import com.tinqinacademy.hotel.api.operations.system.getvisitors.GetVisitorsOutput;
 import com.tinqinacademy.hotel.restexport.HotelRestExport;
 import io.vavr.control.Either;
@@ -30,7 +29,6 @@ public class GetVisitorsOperationProcessor extends BaseOperationProcessor implem
     @Override
     public Either<Errors, GetVisitorsBffOutput> process(GetVisitorsBffInput bffInput) {
         return Try.of(() -> {
-                    log.info(String.format("Start %s %s input: %s", this.getClass().getSimpleName(), LoggingUtils.getMethodName(),bffInput));
                     validate(bffInput);
 
                     GetVisitorsOutput hotelOutput = hotelClient.getVisitors(
@@ -46,7 +44,6 @@ public class GetVisitorsOperationProcessor extends BaseOperationProcessor implem
                             bffInput.getRoomNumber());
 
                     GetVisitorsBffOutput bffOutput = conversionService.convert(hotelOutput,GetVisitorsBffOutput.class);
-                    log.info(String.format("End %s %s output: %s", this.getClass().getSimpleName(), LoggingUtils.getMethodName(), bffOutput));
                     return bffOutput;})
                 .toEither()
                 .mapLeft(exceptionService::handle);

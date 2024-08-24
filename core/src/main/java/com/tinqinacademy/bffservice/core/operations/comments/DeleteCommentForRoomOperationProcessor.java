@@ -6,7 +6,6 @@ import com.tinqinacademy.bffservice.api.operations.commentsservice.system.delete
 import com.tinqinacademy.bffservice.api.operations.commentsservice.system.deletecommentforroom.DeleteCommentForRoomOperation;
 import com.tinqinacademy.bffservice.core.exceptions.ExceptionService;
 import com.tinqinacademy.bffservice.core.operations.BaseOperationProcessor;
-import com.tinqinacademy.bffservice.core.utils.LoggingUtils;
 import com.tinqinacademy.commentsservice.restexport.CommentsRestExport;
 import io.vavr.control.Either;
 import io.vavr.control.Try;
@@ -29,13 +28,11 @@ public class DeleteCommentForRoomOperationProcessor extends BaseOperationProcess
     @Override
     public Either<Errors, DeleteCommentForRoomBffOutput> process(DeleteCommentForRoomBffInput bffInput) {
         return Try.of(() -> {
-                    log.info(String.format("Start %s %s input: %s", this.getClass().getSimpleName(), LoggingUtils.getMethodName(), bffInput));
                     validate(bffInput);
 
                     commentsClient.deleteCommentForRoom(bffInput.getCommentId());
 
                     DeleteCommentForRoomBffOutput bffOutput = DeleteCommentForRoomBffOutput.builder().build();
-                    log.info(String.format("End %s %s output: %s", this.getClass().getSimpleName(), LoggingUtils.getMethodName(), bffOutput));
                     return bffOutput;
                 })
                 .toEither()
