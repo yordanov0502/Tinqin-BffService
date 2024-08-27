@@ -17,7 +17,7 @@ public class LoggingAspect {
     private static final Logger logger = LoggerFactory.getLogger(LoggingAspect.class);
 
     @Around("execution(* com.tinqinacademy.bffservice.core.operations..*.*(..))")
-    public Object logAround(ProceedingJoinPoint joinPoint) throws Throwable {
+    public Object logAround(ProceedingJoinPoint joinPoint) {
 
         String requestId = MDC.get("requestId");
         String methodName = joinPoint.getSignature().getName();
@@ -27,7 +27,15 @@ public class LoggingAspect {
         logger.info("==> Start requestId: {}. Method: {}(). Input: {}", requestId, methodName, inputArgs);
 
         Object result;
-        result = joinPoint.proceed();
+        try {
+            result = joinPoint.proceed();
+        }
+        catch (Throwable exception){
+            String exceptionMessage = exception.getMessage();
+            logger.error("<!!!> Exception in requestId: {}. Method: {}(). Error: {}", requestId, methodName, exceptionMessage);
+            result = exceptionMessage;
+            return result;
+        }
 
         logger.info("<== End requestId: {}. Method: {}(). Output: {}", requestId, methodName, result);
 
