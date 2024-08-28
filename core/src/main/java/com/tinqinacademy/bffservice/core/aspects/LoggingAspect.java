@@ -1,5 +1,11 @@
 package com.tinqinacademy.bffservice.core.aspects;
 
+import com.tinqinacademy.bffservice.api.base.OperationOutput;
+import com.tinqinacademy.bffservice.api.exceptions.Errors;
+import com.tinqinacademy.bffservice.core.exceptions.ExceptionService;
+import io.vavr.control.Either;
+import io.vavr.control.Try;
+import lombok.RequiredArgsConstructor;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -12,12 +18,14 @@ import java.util.Arrays;
 
 @Aspect
 @Component
+@RequiredArgsConstructor
 public class LoggingAspect {
 
     private static final Logger logger = LoggerFactory.getLogger(LoggingAspect.class);
+    private final ExceptionService exceptionService;
 
     @Around("execution(* com.tinqinacademy.bffservice.core.operations..*.*(..))")
-    public Object logAround(ProceedingJoinPoint joinPoint) {
+    public Either<Errors, OperationOutput> logAround(ProceedingJoinPoint joinPoint) {
 
         String requestId = MDC.get("requestId");
         String methodName = joinPoint.getSignature().getName();
@@ -26,21 +34,19 @@ public class LoggingAspect {
 
         logger.info("==> Start requestId: {}. Method: {}(). Input: {}", requestId, methodName, inputArgs);
 
-        Object result;
-        try {
-            result = joinPoint.proceed();
-        }
-        catch (Throwable exception){
-            String exceptionMessage = exception.getMessage();
-            logger.error("<!!!> Exception in requestId: {}. Method: {}(). Error: {}", requestId, methodName, exceptionMessage);
-            result = exceptionMessage;
-            return result;
+        Either<Errors, OperationOutput> either = Try.of(() -> (OperationOutput) joinPoint.proceed())
+                .toEither()
+                .mapLeft(exceptionService::handle);
+
+        if (either.isLeft()) {
+            logger.error("<!!!> Exception in requestId: {}. Method: {}(). Error: {}", requestId, methodName, either.getLeft());
+            return either;
         }
 
-        logger.info("<== End requestId: {}. Method: {}(). Output: {}", requestId, methodName, result);
-
-        return result;
+        logger.info("<== End requestId: {}. Method: {}(). Output: {}", requestId, methodName, either.get());
+        return either;
     }
+
 
 //    @Before("execution(* com.tinqinacademy.bffservice.core.operations..*.*(..))")
 //    public void logBefore(JoinPoint joinPoint) {
